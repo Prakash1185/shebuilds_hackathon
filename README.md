@@ -13,9 +13,9 @@
 
 ## 🔗 Links
 
-- **Notion:** 
-- **Demo Video:** 
-- **Live Website:** 
+- **Notion:** https://mellow-torta-5e8.notion.site/Hacktober-Hack-Days-559f1806c9e08273b15a01f909ec256b
+- **Demo Video:**  https://drive.google.com/file/d/165tg5BwwJ3hXQtl86dw6pb3HAnK35U98/view
+- **Live Website:** https://shebuilds-hackathon.vercel.app/
 
 ## ☁️ Cloudinary Integration
 
