@@ -29,6 +29,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ImageUpload } from "@/components/image-upload";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -225,6 +226,9 @@ export default function StoreBuilderPage() {
           <p className="text-foreground/70">
             Create and manage your online stores with ease
           </p>
+          <div className="mt-3">
+            <ImageUpload onUploaded={(url) => console.log("Uploaded product image:", url)} />
+          </div>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
