@@ -4,7 +4,6 @@
 
 ## 📸 Screenshots
 
-<!-- Add your website screenshots here -->
 
 ![Home](./public/home.png)
 ![Dashboard](./public/dash.png)
@@ -14,9 +13,9 @@
 
 ## 🔗 Links
 
-- **Notion:** <!-- add link -->
-- **Demo Video:** <!-- add link -->
-- **Live Website:** <!-- add link -->
+- **Notion:** 
+- **Demo Video:** 
+- **Live Website:** 
 
 ## ☁️ Cloudinary Integration
 
