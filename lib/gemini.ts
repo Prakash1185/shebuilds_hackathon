@@ -3,12 +3,8 @@ import { GoogleGenAI } from "@google/genai";
 
 const textApiKey = process.env.GEMINI_API_KEY;
 
-if (!textApiKey) {
-  throw new Error("Set GEMINI_API_KEY in environment variables");
-}
-
-const genAI = new GoogleGenerativeAI(textApiKey);
-const imageAI = new GoogleGenAI({ apiKey: textApiKey });
+const genAI = textApiKey ? new GoogleGenerativeAI(textApiKey) : null;
+const imageAI = textApiKey ? new GoogleGenAI({ apiKey: textApiKey }) : null;
 
 interface GeminiImagePart {
   text?: string;
@@ -29,18 +25,23 @@ class GeminiService {
   private model;
 
   constructor() {
-    this.model = genAI.getGenerativeModel({ 
-      model: "gemini-2.5-flash",
-      generationConfig: {
-        temperature: 0.7,
-        topP: 0.8,
-        topK: 40,
-        maxOutputTokens: 8192,
-      },
-    });
+    this.model = genAI
+      ? genAI.getGenerativeModel({
+          model: "gemini-2.5-flash",
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.8,
+            topK: 40,
+            maxOutputTokens: 8192,
+          },
+        })
+      : null;
   }
 
   async generateJSON<T = unknown>(prompt: string): Promise<T> {
+    if (!textApiKey || !this.model) {
+      return { message: "Demo response (Gemini unavailable)" } as T;
+    }
     try {
       const result = await this.model.generateContent(prompt);
       const response = result.response;
@@ -65,29 +66,27 @@ class GeminiService {
       const parsed = JSON.parse(jsonMatch[0]);
       return parsed as T;
     } catch (error) {
-      throw new Error(
-        error instanceof Error 
-          ? `AI Generation Failed: ${error.message}` 
-          : "Failed to generate content"
-      );
+      return { message: "Demo response (Gemini unavailable)" } as T;
     }
   }
 
   async generateText(prompt: string): Promise<string> {
+    if (!textApiKey || !this.model) {
+      return "Demo response: Gemini is unavailable, showing placeholder content.";
+    }
     try {
       const result = await this.model.generateContent(prompt);
       const response = result.response;
       return response.text();
     } catch (error) {
-      throw new Error(
-        error instanceof Error 
-          ? `AI Generation Failed: ${error.message}` 
-          : "Failed to generate content"
-      );
+      return "Demo response: Gemini is unavailable, showing placeholder content.";
     }
   }
 
   async generateImage(prompt: string): Promise<GeneratedImage> {
+    if (!textApiKey || !imageAI) {
+      return this.createPromptBasedSvgImage(prompt);
+    }
     const preferredModel = process.env.GEMINI_IMAGE_MODEL || "gemini-3.1-flash-image-preview";
     const candidateModels = Array.from(
       new Set([
@@ -292,6 +291,9 @@ class GeminiService {
   }
 
   async chat(history: Array<{ role: string; parts: string }>, message: string) {
+    if (!textApiKey || !this.model) {
+      return "Demo response: I'm here to help! (Gemini unavailable)";
+    }
     try {
       const chat = this.model.startChat({
         history: history.map((msg) => ({
@@ -303,7 +305,7 @@ class GeminiService {
       const result = await chat.sendMessage(message);
       return result.response.text();
     } catch {
-      throw new Error("Failed to process chat message");
+      return "Demo response: I'm here to help! (Gemini unavailable)";
     }
   }
 }
