@@ -1,56 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SheCan — Empowering Women Entrepreneurs
 
-## Getting Started
+> A full-stack AI-powered platform helping women build, grow, and scale their businesses.
 
-First, run the development server:
+## 📸 Screenshots
+
+<!-- Add your website screenshots here -->
+
+![Home](./public/home.png)
+![Dashboard](./public/dash.png)
+![Store Builder](./public/store.png)
+![Idea Generator](./public/ideagen.png)
+![AI Chatbot](./public/chatbot.png)
+
+## 🔗 Links
+
+- **Notion:** <!-- add link -->
+- **Demo Video:** <!-- add link -->
+- **Live Website:** <!-- add link -->
+
+## ☁️ Cloudinary Integration
+
+Cloudinary powers all image handling in SheCan, specifically for the **Store Builder** feature where entrepreneurs upload product and store images.
+
+- Images are uploaded from the client via a reusable `ImageUpload` component (`components/image-upload.tsx`) to the `/api/upload` route.
+- The route uses the Cloudinary SDK (`lib/cloudinary.ts`) with `cloudinary.uploader.upload` and stores assets under the `shecan/store` folder.
+- Returned `secure_url`s are used as product/store imagery and rendered with `next/image` (hostname `res.cloudinary.com` configured in `next.config.ts`).
+- Environment variables required:
+  - `CLOUDINARY_CLOUD_NAME`
+  - `CLOUDINARY_API_KEY`
+  - `CLOUDINARY_API_SECRET`
+
+## ✨ Features
+
+- AI-powered design & content generation (Gemini)
+- Online store builder with product image uploads
+- Learning hub & courses
+- Community & partner matching
+- Growth & funding tracker
+- Investor directory
+- Leaderboards & dashboards
+
+## 🛠 Tech Stack
+
+- **Framework:** Next.js 16 (App Router, TypeScript)
+- **Styling:** Tailwind CSS v4, shadcn/ui, Radix UI
+- **Database:** MongoDB (via Prisma)
+- **AI:** Google Gemini (`@google/genai`, `@google/generative-ai`)
+- **Media:** Cloudinary
+- **Charts:** Recharts
+- **Animations:** Framer Motion
+
+## 🚀 Getting Started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Environment Variables
-
-Create a `.env` file in the project root with:
+Create a `.env` file in the project root:
 
 ```bash
-# Used for text, JSON, and image generation
+# Gemini (text, JSON, image generation)
 GEMINI_API_KEY=your_gemini_api_key
-
-# Optional override for image model
 GEMINI_IMAGE_MODEL=gemini-2.5-flash-image
 
-# Cloudinary (image uploads)
+# MongoDB
+DATABASE_URL_1=mongodb://...
+
+# Cloudinary
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-Notes:
-- `GEMINI_API_KEY` is used for all Gemini models.
+## 📁 Project Structure
 
-## Learn More
+```
+app/          # Next.js routes & API
+components/   # UI & dashboard pages
+lib/          # Gemini, Cloudinary clients
+prisma/       # Schema & migrations
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
