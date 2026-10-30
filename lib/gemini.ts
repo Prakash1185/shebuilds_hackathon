@@ -27,48 +27,43 @@ class GeminiService {
   constructor() {
     this.model = genAI
       ? genAI.getGenerativeModel({
-          model: "gemini-2.5-flash",
+          model: "gemini-3.8-flash",
           generationConfig: {
             temperature: 0.7,
             topP: 0.8,
             topK: 40,
             maxOutputTokens: 8192,
+          responseMimeType: "application/json"
           },
         })
       : null;
   }
 
-  async generateJSON<T = unknown>(prompt: string): Promise<T> {
-    if (!textApiKey || !this.model) {
-      return { message: "Demo response (Gemini unavailable)" } as T;
-    }
-    try {
-      const result = await this.model.generateContent(prompt);
-      const response = result.response;
-      const text = response.text();
-
-      // Extract JSON from response (handle markdown code blocks)
-      let jsonText = text.trim();
-      
-      // Remove markdown code blocks if present
-      if (jsonText.startsWith("```json")) {
-        jsonText = jsonText.replace(/```json\n?/g, "").replace(/```\n?/g, "");
-      } else if (jsonText.startsWith("```")) {
-        jsonText = jsonText.replace(/```\n?/g, "");
-      }
-
-      // Try to find JSON array or object
-      const jsonMatch = jsonText.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new Error("No valid JSON found in response");
-      }
-
-      const parsed = JSON.parse(jsonMatch[0]);
-      return parsed as T;
-    } catch (error) {
-      return { message: "Demo response (Gemini unavailable)" } as T;
-    }
+  
+async generateJSON<T = unknown>(prompt: string): Promise<T> {
+  if (!textApiKey || !this.model) {
+    throw new Error("Gemini API key missing or model not initialized");
   }
+
+  try {
+    const result = await this.model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text().trim();
+
+    console.log("GEMINI TEXT OUTPUT:", text);
+
+    const parsed = JSON.parse(text);
+
+    return parsed as T;
+  } catch (error) {
+    console.error("GEMINI SERVICE ERROR:", error);
+
+    throw new Error(
+      error instanceof Error ? error.message : "Gemini generation failed"
+    );
+  }
+}
+
 
   async generateText(prompt: string): Promise<string> {
     if (!textApiKey || !this.model) {
