@@ -64,7 +64,9 @@ ${transcript || "No prior conversation."}
 Current user question:
 ${userMessage}`;
 
-    const reply = await gemini.generateText(prompt);
+    const reply = await gemini.generateText(prompt, {
+      model: "google/gemini-3.5-flash",
+    });
 
     const normalizedReply = reply.trim();
     if (!normalizedReply) {

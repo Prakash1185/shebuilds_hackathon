@@ -117,7 +117,9 @@ Rules:
 
     let result: DesignGenerationResult = {};
     try {
-      result = await gemini.generateJSON<DesignGenerationResult>(prompt);
+      result = await gemini.generateJSON<DesignGenerationResult>(prompt, {
+        model: "google/gemini-3.5-flash",
+      });
     } catch {
       // Fallback to user prompt if text generation is unavailable.
       result = {};
@@ -138,9 +140,17 @@ Design constraints:
     let aiGenerated = false;
 
     try {
-      const imageResult = await gemini.generateImage(imagePrompt);
-      imageUrl = `data:${imageResult.mimeType};base64,${imageResult.base64Data}`;
-      aiGenerated = imageResult.model !== "shecan-svg-fallback";
+      const imageResult = await gemini.generateImage(imagePrompt, {
+        model: "google/gemini-2.5-flash-image",
+      });
+      imageUrl =
+        imageResult.url ||
+        (imageResult.base64Data
+          ? `data:${imageResult.mimeType};base64,${imageResult.base64Data}`
+          : generatePlaceholderImage(request));
+      aiGenerated =
+        imageResult.model !== "shecan-svg-fallback" &&
+        !imageResult.model.includes("fallback");
     } catch {
       // Keep UX functional if provider quota/rate limits are hit.
       aiGenerated = false;

@@ -146,7 +146,7 @@ const data = {
         },
         {
           title: "Community",
-          url: "/learing/community",
+          url: "/learning/community",
           icon: MessageCircle,
         },
       ],

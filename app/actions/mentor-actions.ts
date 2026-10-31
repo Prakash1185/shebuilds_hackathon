@@ -67,7 +67,9 @@ Current user question:
 ${userMessage}`;
 
   try {
-    const reply = await gemini.generateText(prompt);
+    const reply = await gemini.generateText(prompt, {
+      model: "google/gemini-3.5-flash",
+    });
     const normalizedReply = reply.trim();
 
     if (!normalizedReply) {
