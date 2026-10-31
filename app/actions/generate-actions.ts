@@ -85,7 +85,25 @@ Example format:
 ]`;
 
     // Generate ideas using Gemini
-    const response = await gemini.generateJSON(prompt);
+    const rawResponse = await gemini.generateJSON<any>(prompt, {
+      model: "google/gemini-3.5-flash",
+    });
+
+    let responseList: any[] = [];
+    if (Array.isArray(rawResponse)) {
+      responseList = rawResponse;
+    } else if (rawResponse && typeof rawResponse === "object") {
+      const candidate =
+        rawResponse.ideas ||
+        rawResponse.businessIdeas ||
+        rawResponse.data ||
+        Object.values(rawResponse).find((val) => Array.isArray(val));
+      if (Array.isArray(candidate)) {
+        responseList = candidate;
+      }
+    }
+
+    const response = responseList;
 
     // Validate and format response
     if (!Array.isArray(response) || response.length === 0) {

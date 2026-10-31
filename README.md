@@ -63,12 +63,17 @@ Open http://localhost:3000.
 Create a `.env` file in the project root:
 
 ```bash
-# Gemini (text, JSON, image generation)
-GEMINI_API_KEY=your_gemini_api_key
-GEMINI_IMAGE_MODEL=gemini-2.5-flash-image
+# Mesh API (Unified Gateway for Gemini Models)
+MESH_API_KEY=rsk_your_router_service_key
+MESH_BASE_URL=https://api.meshapi.ai/v1
+MESH_TEXT_MODEL=google/gemini-3.5-flash
+MESH_IMAGE_MODEL=google/gemini-2.5-flash-image
 
-# MongoDB
-DATABASE_URL_1=mongodb://...
+# (Optional Direct Fallback)
+GEMINI_API_KEY=your_gemini_api_key
+
+# MongoDB / PostgreSQL
+DATABASE_URL_1=postgresql://...
 
 # Cloudinary
 CLOUDINARY_CLOUD_NAME=your_cloud_name
